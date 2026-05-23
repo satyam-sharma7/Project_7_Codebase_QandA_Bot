@@ -48,9 +48,11 @@ def chunk_python_code(source_code: str, file_name: str):
     tree = ast.parse(source_code)
     chunks = []
     metadatas = []
-    for node in tree.body:
+    ids = []
+    for no, node in enumerate(tree.body):
         chunk = None
         metadata = None
+        id = None
 
         # chunk functions
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -64,6 +66,7 @@ def chunk_python_code(source_code: str, file_name: str):
                 "start_line":start,
                 "end_line":end
             }
+            id = f"{file_name}__{node.name}__{no}"
         
         # chunk classes
         elif isinstance(node, (ast.ClassDef)):
@@ -77,6 +80,7 @@ def chunk_python_code(source_code: str, file_name: str):
                 "start_line":start,
                 "end_line":end
             }
+            id = f"{file_name}__{node.name}__{no}"
 
         # Chunk Top-Level Code (Imports, global variables, scripts)
         else:
@@ -90,18 +94,23 @@ def chunk_python_code(source_code: str, file_name: str):
                 "start_line":start,
                 "end_line":end
             }
+            id = f"{file_name}_top_level__{no}"
 
         if chunk:
             chunks.append(chunk[0])
             metadatas.append(metadata)
+            ids.append(id)
 
-    return chunks, metadatas
+    return chunks, metadatas, ids
 
 
-chunks, metadatas = chunk_python_code(code, "retrieve.py")
-for i in chunks:
-    print(i)
+chunks, metadatas, ids = chunk_python_code(code, "retrieve.py")
+print("Chunked sussesfully")
 
+from chunk_store import embed_store
+
+count = embed_store(chunks, metadatas, ids)
+print(count)
 
 
 
