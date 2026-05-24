@@ -7,41 +7,6 @@ Still need to handle code of other languages
 
 import ast
 import time
-code = """import pandas as pd
-import numpy as np
-a = 4
-b = 0
-c = a+b
-def relevent_chunks(query: str, top_k=1, collection_name="my_embedded_chunks"):
-    collection = DBclient.get_collection(name=collection_name,
-        embedding_function=em_fun
-        )
-    
-    results = collection.query(
-        query_texts=[query],
-        n_results=top_k
-    )
-
-    print(results["documents"][0][0:top_k])
-    return results["documents"][0][0:top_k]
-
-
-def lets_see(query: str, top_k=1, collection_name="my_embedded_chunks"):
-    collection = DBclient.get_collection(name=collection_name,
-        embedding_function=em_fun
-        )
-    
-    results = collection.query(
-        query_texts=[query],
-        n_results=top_k
-    )
-
-    print(results["documents"][0][0:top_k])
-    return results["documents"][0][0:top_k]
-
-async def timer():
-    await time.sleep(3)
-"""
 
 def chunk_python_code(source_code: str, file_name: str):
     source_lines = source_code.splitlines()
@@ -102,15 +67,6 @@ def chunk_python_code(source_code: str, file_name: str):
             ids.append(id)
 
     return chunks, metadatas, ids
-
-
-chunks, metadatas, ids = chunk_python_code(code, "retrieve.py")
-print("Chunked sussesfully")
-
-from chunk_store import embed_store
-
-count = embed_store(chunks, metadatas, ids)
-print(count)
 
 
 
