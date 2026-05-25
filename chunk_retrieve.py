@@ -19,6 +19,3 @@ def relevent_chunks(query: str, top_k=3, collection_name="code_snippet"):
     )
 
     return results["documents"][0][0:top_k]
-
-collection = DBclient.get_collection(name="code_snippet", embedding_function=em_fun)
-print(collection.id)

@@ -67,6 +67,3 @@ def chunk_python_code(source_code: str, file_name: str):
             ids.append(id)
 
     return chunks, metadatas, ids
-
-
-

@@ -14,5 +14,3 @@ def embed_store(chunks: list, metadatas, ids, collection_name="code_snippet"):
     )
 
     return len(chunks)
-
-
